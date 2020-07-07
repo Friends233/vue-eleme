@@ -32,6 +32,9 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
@@ -47,6 +50,7 @@
 <script type="text/ecmascript-6">
   import { getGoods } from 'api'
   import ShopCart from '../shopcart/shopcart'
+  import cartcontrol from '../cartcontrol/cartcontrol'
 
   export default {
     name: 'goods',
@@ -80,7 +84,8 @@
       }
     },
     components: {
-      ShopCart
+      ShopCart,
+      cartcontrol
     }
   }
 </script>
@@ -175,6 +180,10 @@
             text-decoration: line-through
             font-size: $fontsize-small-s
             color: $color-light-grey
+        .cartcontrol-wrapper
+          position absolute
+          right 0
+          bottom 12px
     .shop-cart-wrapper
       position: absolute
       left: 0
