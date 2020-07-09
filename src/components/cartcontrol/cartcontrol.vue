@@ -21,7 +21,7 @@
       }
     },
     methods: {
-      addCart () {
+      addCart (event) {
         if (!this.food.count) {
           this.$set(this.food, 'count', 1)
         } else {
