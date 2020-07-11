@@ -47,9 +47,9 @@ module.exports = {
       })
     }
   },
-  chainWebpack: function (config) {
+  chainWebpack (config) {
     config.resolve.alias
-      .set('components', resolve('src/compoinents'))
+      .set('components', resolve('src/components'))
       .set('common', resolve('src/common'))
       .set('api', resolve('src/api'))
   }

@@ -35,11 +35,13 @@
   </transition>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import star from '../star/star'
   import SupportIco from '../support-ico/support-ico'
+  import popupMixin from '../../common/mixins/popup'
 
   export default {
+    mixins: [popupMixin],
     name: 'header-detail',
     props: {
       seller: {
@@ -47,19 +49,6 @@
         default () {
           return {}
         }
-      }
-    },
-    data () {
-      return {
-        visible: false
-      }
-    },
-    methods: {
-      show () {
-        this.visible = true
-      },
-      hide () {
-        this.visible = false
       }
     },
     components: {
