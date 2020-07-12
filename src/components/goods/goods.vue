@@ -37,6 +37,7 @@
         >
           <ul>
             <li
+              @click="selectFood(food)"
               v-for="food in good.foods"
               :key="food.name"
               class="food-item"
@@ -89,6 +90,7 @@
     data () {
       return {
         goods: [],
+        selectedFood: {},
         scrollOptions: {
           click: false,
           directionLockThreshold: 0
@@ -138,6 +140,42 @@
       },
       onAdd (el) {
         this.$refs.shopCart.drop(el)
+      },
+      selectFood (food) {
+        this.selectedFood = food
+        this._showFood()
+        this._showShopCartSticky()
+      },
+      _showFood () {
+        this.foodComp = this.foodComp || this.$createFood({
+          $props: {
+            food: 'selectedFood'
+          },
+          $events: {
+            leave: () => {
+              this._hideShopCartList()
+            },
+            add: (el) => {
+              this.shopCartStickyComp.drop(el)
+            }
+          }
+        })
+        this.foodComp.show()
+      },
+      _showShopCartSticky () {
+        this.shopCartStickyComp = this.shopCartStickyComp || this
+          .$createShopCartSticky({
+            $props: {
+              selectFoods: 'selectFoods',
+              minPrice: this.seller.minPrice,
+              deliveryPrice: this.seller.deliveryPrice,
+              fold: true
+            }
+          })
+        this.shopCartStickyComp.show()
+      },
+      _hideShopCartList () {
+        this.shopCartStickyComp.hide()
       }
     },
     components: {
