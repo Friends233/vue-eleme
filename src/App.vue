@@ -2,7 +2,7 @@
   <div id="app">
     <v-header :seller="seller"></v-header>
     <div class="tab-wrapper">
-      <tab :tabs="tabs"></tab>
+      <tab :inital-index=defInitalIndex :tabs="tabs"></tab>
     </div>
   </div>
 </template>
@@ -14,12 +14,18 @@
   import Seller from './components/seller/seller'
   import { getSeller } from 'api'
   import Tab from './components/tab/tab'
+  import qs from 'query-string'
+  import { loadFromLocal } from './common/js/storage'
 
+  const KEY = 'initalIndex'
   export default {
     name: 'app',
     data () {
       return {
-        seller: {}
+        seller: {
+          id: qs.parse(location.search).id
+        },
+        defInitalIndex: Number
       }
     },
     computed: {
@@ -51,10 +57,13 @@
     },
     created () {
       this._getSeller()
+      this.defInitalIndex = loadFromLocal(this.seller.id, KEY, 0)
     },
     methods: {
       _getSeller () {
-        getSeller().then((seller) => {
+        getSeller({
+          id: this.seller.id
+        }).then((seller) => {
           this.seller = seller
         })
       }

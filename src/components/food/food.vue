@@ -4,7 +4,7 @@
     @after-leave="afterLeave"
   >
     <div class="food" v-show="visible">
-      <cube-scroll ref="scroll">
+      <cube-scroll :data="computedRatings" ref="scroll">
         <div class="food-content">
           <div class="image-header">
             <img :src="food.image">
@@ -78,6 +78,7 @@
 <script type="text/ecmascript-6">
   import Split from '../split/split'
   import popupMixin from '../../common/mixins/popup'
+  import ratingMixin from '../../common/mixins/rating'
   import Cartcontrol from '../cartcontrol/cartcontrol'
   import RatingSelect from '../rating-select/rating-select'
   import moment from 'moment'
@@ -85,10 +86,9 @@
   const EVENT_SHOW = 'show'
   const EVENT_LEAVE = 'leave'
   const EVENT_ADD = 'add'
-  const ALL = 2
   export default {
     name: 'food',
-    mixins: [popupMixin],
+    mixins: [popupMixin, ratingMixin],
     props: {
       food: {
         type: Object
@@ -96,8 +96,6 @@
     },
     data () {
       return {
-        onlyContent: true,
-        selectType: ALL,
         desc: {
           all: '全部',
           positive: '推荐',
@@ -108,18 +106,6 @@
     computed: {
       ratings () {
         return this.food.ratings
-      },
-      computedRatings () {
-        const ret = []
-        this.ratings.forEach((rating) => {
-          if (this.onlyContent && !rating.text) {
-            return
-          }
-          if (this.selectType === ALL || this.selectType === rating.rateType) {
-            ret.push(rating)
-          }
-        })
-        return ret
       }
     },
     created () {
@@ -142,12 +128,6 @@
       },
       format (time) {
         return moment(time).format('YYYY-MM-DD hh:mm')
-      },
-      onSelect (type) {
-        this.selectType = type
-      },
-      onToggle () {
-        this.onlyContent = !this.onlyContent
       }
     },
     components: {

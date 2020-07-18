@@ -29,6 +29,9 @@
 </template>
 
 <script>
+  import { saveToLocal } from '../../common/js/storage'
+
+  const KEY = 'initalIndex'
   export default {
     name: 'tab',
     props: {
@@ -71,6 +74,7 @@
     methods: {
       onChange (current) {
         this.index = current
+        saveToLocal(this.tabs[0].data.seller.id, KEY, this.index)
         const component = this.$refs.component[current]
         component.fetch && component.fetch()
       },

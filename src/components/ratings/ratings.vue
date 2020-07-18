@@ -1,5 +1,5 @@
 <template>
-  <cube-scroll ref="scroll" class="ratings" :options="scrollOptions">
+  <cube-scroll ref="scroll" :data="computedRatings" class="ratings" :options="scrollOptions">
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
@@ -25,10 +25,19 @@
         </div>
       </div>
       <split></split>
+      <rating-select
+        :ratings="ratings"
+        :onlyContent="onlyContent"
+        :select-type="selectType"
+        @select="onSelect"
+        @toggle="onToggle"
+        v-if="ratings.length"
+      >
+      </rating-select>
       <div class="rating-wrapper">
         <ul>
           <li
-            v-for="(rating,index) in ratings"
+            v-for="(rating,index) in computedRatings"
             :key="index"
             class="rating-item border-bottom-1px"
           >
@@ -66,11 +75,14 @@
 <script>
   import Star from '../star/star'
   import Split from '../split/split'
+  import RatingSelect from '../rating-select/rating-select'
+  import ratingMixin from '../../common/mixins/rating'
   import { getRatings } from 'api'
   import moment from 'moment'
 
   export default {
     name: 'ratings',
+    mixins: [ratingMixin],
     props: {
       data: {
         type: Object
@@ -94,7 +106,9 @@
       fetch () {
         if (!this.fetched) {
           this.fetched = true
-          getRatings().then((ratings) => {
+          getRatings({
+            id: this.seller.id
+          }).then((ratings) => {
             this.ratings = ratings
           })
         }
@@ -104,6 +118,7 @@
       }
     },
     components: {
+      RatingSelect,
       Star,
       Split
     }
